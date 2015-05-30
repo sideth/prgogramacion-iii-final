@@ -1,3 +1,6 @@
+import ast
+import json
+
 __author__ = 'sideth'
 
 import unittest
@@ -10,7 +13,6 @@ def existe(raiz, grafo):
             if grafo.keys()[k] is raiz:
                 return True
     return False
-
 
 def num_hojas(raiz, grafo):
     if existe(raiz, grafo):
@@ -30,7 +32,7 @@ def num_hojas(raiz, grafo):
 def add_nodo(raiz, arbol, nodo):
     if arbol.existe(raiz, arbol):
         if raiz is None:
-            arbol[raiz] = {"apuntador_izq" : None, "apuntador_der" : None}
+            arbol[raiz] = {"apuntador_izq": None, "apuntador_der": None}
         else:
             nodo["apuntador_izq"] = None
             nodo["apuntador_der"] = None
@@ -71,7 +73,7 @@ def es_completo(n):
             return aux + 1
 
 
-def recorrido(raiz, default = "pos"):
+def recorrido(arbol, raiz, default="pos"):
     if raiz is not None:
         if default == "pre":
             print(raiz)
@@ -91,28 +93,36 @@ def espejo(arbol):
         v["apuntador_izq"] = aux
     return aux1
 
+def exportar_json(arbol):
+    with open("arbol.json", "w") as w:
+        json.dump(arbol, w)
+
+def importar_json():
+    with open("arbol.json", "r") as l:
+        return json.load(l)
 
 arbol = {8: {"apuntador_izq": 3, "apuntador_der": 10}, 3: {"apuntador_izq": 1, "apuntador_der": 6},
-             1: {"apuntador_izq": None, "apuntador_der": None}, 6: {"apuntador_izq": 4, "apuntador_der": 7},
-             4: {"apuntador_izq": None, "apuntador_der": None}, 7: {"apuntador_izq": None, "apuntador_der": None},
-             10: {"apuntador_izq": None, "apuntador_der": 14}, 14: {"apuntador_izq": 13, "apuntador_der": None},
-             13: {"apuntador_izq": None, "apuntador_der": None}}
+         1: {"apuntador_izq": None, "apuntador_der": None}, 6: {"apuntador_izq": 4, "apuntador_der": 7},
+         4: {"apuntador_izq": None, "apuntador_der": None}, 7: {"apuntador_izq": None, "apuntador_der": None},
+         10: {"apuntador_izq": None, "apuntador_der": 14}, 14: {"apuntador_izq": 13, "apuntador_der": None},
+         13: {"apuntador_izq": None, "apuntador_der": None}}
 
-espejoo = {8: {"apuntador_der": 3, "apuntador_izq": 10}, 3: {"apuntador_der": 1, "apuntador_izq": 6},
-             1: {"apuntador_der": None, "apuntador_izq": None}, 6: {"apuntador_der": 4, "apuntador_izq": 7},
-             4: {"apuntador_der": None, "apuntador_izq": None}, 7: {"apuntador_der": None, "apuntador_izq": None},
-             10: {"apuntador_der": None, "apuntador_izq": 14}, 14: {"apuntador_der": 13, "apuntador_izq": None},
-             13: {"apuntador_der": None, "apuntador_izq": None}}
+arbolEspejo = {8: {"apuntador_der": 3, "apuntador_izq": 10}, 3: {"apuntador_der": 1, "apuntador_izq": 6},
+           1: {"apuntador_der": None, "apuntador_izq": None}, 6: {"apuntador_der": 4, "apuntador_izq": 7},
+           4: {"apuntador_der": None, "apuntador_izq": None}, 7: {"apuntador_der": None, "apuntador_izq": None},
+           10: {"apuntador_der": None, "apuntador_izq": 14}, 14: {"apuntador_der": 13, "apuntador_izq": None},
+           13: {"apuntador_der": None, "apuntador_izq": None}}
 
 
 class MiPrueba(unittest.TestCase):
-
     def test_caso1(self):
         self.assertEqual(4, num_hojas(8, arbol))
+
     def test_caso2(self):
-        self.assertEqual(espejoo, espejo(arbol))
+        self.assertEqual(arbolEspejo, espejo(arbol))
+
     def test_caso3(self):
         self.assertEqual(None, es_completo(arbol[1]))
 
-if __name__=='__main__':
+if __name__ == '__main__':
     unittest.main()
